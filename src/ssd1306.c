@@ -28,6 +28,8 @@
 
 #include "ssd1306.h"
 
+#define INVERT_X    FALSE
+#define INVERT_Y    FALSE
 
 
 char buf[10];
@@ -93,9 +95,17 @@ void  ssd1306Init(uint8_t vccstate)
     ssd1306Command( SSD1306_MEMORYMODE);                    // 0x20
     ssd1306Command( 0x00);                                  // 0x0 act like ks0108
     //  4. set Segment re-map A0h/A1h    
-    ssd1306Command(   SSD1306_SEGREMAP | 0x1);
+#if INVERT_X
+    ssd1306Command(   SSD1306_SEGREMAPINV);
+#else
+    ssd1306Command(   SSD1306_SEGREMAP);
+#endif
     //   5. Set COM Output Scan Direction C0h/C8h
+#if INVERT_Y
     ssd1306Command(   SSD1306_COMSCANDEC);
+#else
+    ssd1306Command(   SSD1306_COMSCANINC);
+#endif
     //  6. Set COM Pins hardware configuration DAh, 12
     ssd1306Command(   SSD1306_SETCOMPINS);
     ssd1306Command(   0x12);
