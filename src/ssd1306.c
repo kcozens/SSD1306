@@ -218,10 +218,10 @@ void  ssd1306Data( uint8_t *data, int size  ) {
 void ssd1306ClearScreen(uint16_t layer) 
 {
     if (layer & 0x1)
-    memset(buffer, 0x00, 1024);
+    memset(buffer, 0x00, sizeof(buffer));
     #ifdef MULTILAYER  
         if (layer & 0x2)
-        memset(buffer_ol, 0x00, 1024);
+        memset(buffer_ol, 0x00, sizeof(buffer_ol));
     #endif
 }
 
