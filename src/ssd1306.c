@@ -255,6 +255,17 @@ void   ssd1306DrawPixel(int16_t x, int16_t y, uint16_t color, uint16_t layer)
     #endif
 }
 
+void ssd1306ClearPixel(int16_t x, int16_t y)
+{
+    if ((x >= SSD1306_LCDWIDTH) || (x < 0) || (y >= SSD1306_LCDHEIGHT) || (y < 0))
+        return;
+
+    buffer[x+ (y/8)*SSD1306_LCDWIDTH] &= ~(1 << (y&7));
+    #ifdef MULTILAYER
+        buffer_ol[x+ (y/8)*SSD1306_LCDWIDTH] &= ~(1 << (y&7));
+    #endif
+}
+
 /**
  * 
  * @param x0

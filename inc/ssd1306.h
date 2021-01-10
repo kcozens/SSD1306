@@ -83,7 +83,7 @@ void        ssd1306Refresh ( void );
 void        ssd1306TurnOn(void);
 void        ssd1306TurnOff(void);
 void        ssd1306DrawPixel(int16_t, int16_t, uint16_t, uint16_t) ;
-//void        ssd1306ClearPixel(int16_t, int16_t);
+void        ssd1306ClearPixel(int16_t, int16_t);
 //uint8_t     ssd1306GetPixel(int16_t, int16_t);
 void        ssd1306ClearScreen ( uint16_t );
 void        ssd1306DrawLine(int16_t, int16_t, int16_t, int16_t, uint16_t, uint16_t);
