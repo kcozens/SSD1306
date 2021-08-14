@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   newmain.c
  * Author: vadzim
  *
@@ -36,20 +36,20 @@ char buf[10];
 int com_serial;
 int failcount;
 int bus; //i2c bus descriptor
-FONT_INFO    *_font; 
+FONT_INFO    *_font;
 // oled buffer
 static uint8_t    buffer[SSD1306_LCDWIDTH * SSD1306_LCDHEIGHT / 8];
 // ovelay buffer
-#ifdef MULTILAYER  
+#ifdef MULTILAYER
 static uint8_t    buffer_ol[SSD1306_LCDWIDTH * SSD1306_LCDHEIGHT / 8];
-#endif    
+#endif
 
 
 /**
  * @brief Init I2Cdevice
  * @param bus
  * @param addr
- * @return 
+ * @return
  */
 int i2c_init(char * bus, int addr)
 {
@@ -62,7 +62,7 @@ int i2c_init(char * bus, int addr)
         com_serial=0;
         exit(EXIT_FAILURE);
     }
- 
+
     if (ioctl(file, I2C_SLAVE, addr) < 0)
         {
             printf("Failed to acquire bus access and/or talk to slave.\n");
@@ -73,7 +73,7 @@ int i2c_init(char * bus, int addr)
     printf("i2c_init OK. %d \n", file);
     return file;
 }
- 
+
 /**
  * @brief Init display controller
  * @param vccstate
@@ -81,7 +81,7 @@ int i2c_init(char * bus, int addr)
 void  ssd1306Init(uint8_t vccstate)
 {
   _font = (FONT_INFO*)&ubuntuMono_24ptFontInfo;
-  
+
     // Initialisation sequence
     ssd1306TurnOff();
     //  1. set mux ratio
@@ -91,10 +91,10 @@ void  ssd1306Init(uint8_t vccstate)
     ssd1306Command(   SSD1306_SETDISPLAYOFFSET );
     ssd1306Command(   0x0 );
     //  3. set display start line
-    ssd1306Command(   SSD1306_SETSTARTLINE | 0x0 ); 
+    ssd1306Command(   SSD1306_SETSTARTLINE | 0x0 );
     ssd1306Command( SSD1306_MEMORYMODE);                    // 0x20
     ssd1306Command( 0x00);                                  // 0x0 act like ks0108
-    //  4. set Segment re-map A0h/A1h    
+    //  4. set Segment re-map A0h/A1h
 #if INVERT_X
     ssd1306Command(   SSD1306_SEGREMAPINV);
 #else
@@ -111,34 +111,33 @@ void  ssd1306Init(uint8_t vccstate)
     ssd1306Command(   0x12);
     //  7. Set Contrast Control 81h, 7Fh
     ssd1306Command(   SSD1306_SETCONTRAST );
-    if (vccstate == SSD1306_EXTERNALVCC) { 
+    if (vccstate == SSD1306_EXTERNALVCC) {
         ssd1306Command(   0x9F );
-    } else { 
+    } else {
         ssd1306Command(   0xff );
     }
     //  8. Disable Entire Display On A4h
     ssd1306Command(   SSD1306_DISPLAYALLON_RESUME);
-    //  9. Set Normal Display A6h 
+    //  9. Set Normal Display A6h
     ssd1306Command(   SSD1306_NORMALDISPLAY);
-    //  10. Set Osc Frequency  D5h, 80h 
+    //  10. Set Osc Frequency  D5h, 80h
     ssd1306Command(   SSD1306_SETDISPLAYCLOCKDIV);
     ssd1306Command(   0x80);
-    //  11. Enable charge pump regulator 8Dh, 14h 
+    //  11. Enable charge pump regulator 8Dh, 14h
     ssd1306Command(   SSD1306_CHARGEPUMP );
-    if (vccstate == SSD1306_EXTERNALVCC) { 
+    if (vccstate == SSD1306_EXTERNALVCC) {
         ssd1306Command(   0x10);
-    } else { 
+    } else {
         ssd1306Command(   0x14);
     }
-    //  12. Display On AFh 
+    //  12. Display On AFh
     ssd1306TurnOn();
-
 }
 
 /**
  * @brief Renders the contents of the pixel buffer on the LCD
  */
-void ssd1306Refresh(void) 
+void ssd1306Refresh(void)
 {
     ssd1306Command(SSD1306_SETLOWCOLUMN  | 0x0);  // low col = 0
     ssd1306Command(SSD1306_SETHIGHCOLUMN | 0x0);  // hi col = 0
@@ -203,7 +202,7 @@ void  ssd1306Data( uint8_t *data, int size  ) {
         exit(0);
     }
     *ptr = 0x40;                               // first send "Control byte"
-    memcpy( ptr + 1, data, size ); 
+    memcpy( ptr + 1, data, size );
     ssd1306Command(SSD1306_SETLOWCOLUMN  | 0x0 );
     ssd1306Command(SSD1306_SETHIGHCOLUMN | 0x0 );
     ssd1306Command(SSD1306_SETSTARTLINE  | 0x0 );
@@ -215,11 +214,11 @@ void  ssd1306Data( uint8_t *data, int size  ) {
  * @brief Clears the screen buffer
  * @param layer
  */
-void ssd1306ClearScreen(uint16_t layer) 
+void ssd1306ClearScreen(uint16_t layer)
 {
     if (layer & 0x1)
     memset(buffer, 0x00, sizeof(buffer));
-    #ifdef MULTILAYER  
+    #ifdef MULTILAYER
         if (layer & 0x2)
         memset(buffer_ol, 0x00, sizeof(buffer_ol));
     #endif
@@ -232,25 +231,25 @@ void ssd1306ClearScreen(uint16_t layer)
  * @param color The color (BLACK, WHITE, INVERSE)
  * @param layer
  */
-void   ssd1306DrawPixel(int16_t x, int16_t y, uint16_t color, uint16_t layer) 
+void   ssd1306DrawPixel(int16_t x, int16_t y, uint16_t color, uint16_t layer)
 {
     if ((x >= SSD1306_LCDWIDTH) || (x < 0) || (y >= SSD1306_LCDHEIGHT) || (y < 0))
     return;
 
     if (layer & LAYER0)
-    switch (color) 
+    switch (color)
     {
         case WHITE:   buffer[x+ (y/8)*SSD1306_LCDWIDTH] |=  (1 << (y&7)); break;
-        case BLACK:   buffer[x+ (y/8)*SSD1306_LCDWIDTH] &= ~(1 << (y&7)); break; 
-        case INVERSE: buffer[x+ (y/8)*SSD1306_LCDWIDTH] ^=  (1 << (y&7)); break; 
+        case BLACK:   buffer[x+ (y/8)*SSD1306_LCDWIDTH] &= ~(1 << (y&7)); break;
+        case INVERSE: buffer[x+ (y/8)*SSD1306_LCDWIDTH] ^=  (1 << (y&7)); break;
     }
-    #ifdef MULTILAYER  
+    #ifdef MULTILAYER
         if (layer & LAYER1)
-            switch (color) 
+            switch (color)
             {
                 case WHITE:   buffer_ol[x+ (y/8)*SSD1306_LCDWIDTH] |=  (1 << (y&7)); break;
-                case BLACK:   buffer_ol[x+ (y/8)*SSD1306_LCDWIDTH] &= ~(1 << (y&7)); break; 
-                case INVERSE: buffer_ol[x+ (y/8)*SSD1306_LCDWIDTH] ^=  (1 << (y&7)); break; 
+                case BLACK:   buffer_ol[x+ (y/8)*SSD1306_LCDWIDTH] &= ~(1 << (y&7)); break;
+                case INVERSE: buffer_ol[x+ (y/8)*SSD1306_LCDWIDTH] ^=  (1 << (y&7)); break;
             }
     #endif
 }
@@ -267,7 +266,7 @@ void ssd1306ClearPixel(int16_t x, int16_t y)
 }
 
 /**
- * 
+ *
  * @param x0
  * @param y0
  * @param x1
@@ -432,9 +431,9 @@ void ssd1306DrawBitmap(int16_t x, int16_t y, uint8_t *data,
  * @param size
  * @param color
  * @param layer
- * @return 
+ * @return
  */
-int16_t  ssd1306DrawChar(int16_t x, int16_t y, uint8_t c, uint8_t size, 
+int16_t  ssd1306DrawChar(int16_t x, int16_t y, uint8_t c, uint8_t size,
 uint16_t color, uint16_t layer) {
     int16_t i,j,k, _x;
     uint16_t line;
@@ -442,21 +441,21 @@ uint16_t color, uint16_t layer) {
     if( (c < _font->startChar) ||   // skip if character don't exist
         (c > _font->endChar))        // skip if character don't exist
     return 0;
-  
+
     c = c - _font->startChar;
     // skip invisible characters
-    line = _font->charInfo[c].offset; 
+    line = _font->charInfo[c].offset;
     // scan height
     for ( i=0; i < _font->charInfo[c].heightBits; i++ ) {
         k =  (_font->charInfo[c].widthBits-1)/8 + 1; //number of bytes in a row
         _x = 0;
         do {
-            int16_t l = _font->data[line]; 
+            int16_t l = _font->data[line];
             // scan width
             for ( j = 0; j < 8; j++ ) {
                 if ( l & 0x80 ) {
                     if (size == 1) {
-                        ssd1306DrawPixel( x+_x, y+i, color, layer ); 
+                        ssd1306DrawPixel( x+_x, y+i, color, layer );
                     } else {
                         ssd1306DrawRect(x+(_x*size), y+(i*size), size, size, color, layer);
                     }
@@ -481,7 +480,7 @@ uint16_t color, uint16_t layer) {
  * @param color
  * @param layer
  */
-void  ssd1306DrawString(int16_t x, int16_t y, int8_t *text, uint8_t size, 
+void  ssd1306DrawString(int16_t x, int16_t y, int8_t *text, uint8_t size,
                         uint16_t color, uint16_t layer)
 {
     static uint16_t l, pos;
@@ -491,11 +490,11 @@ void  ssd1306DrawString(int16_t x, int16_t y, int8_t *text, uint8_t size,
         pos = pos + ssd1306DrawChar(x + (pos * size + 1), y, text[l], size, color, layer);
     }
 }
- 
+
 /**
  * @brief Mix layers
  */
-#ifdef MULTILAYER 
+#ifdef MULTILAYER
 void ssd1306MixFrameBuffer(void)
 {
   uint16_t i;
@@ -503,11 +502,11 @@ void ssd1306MixFrameBuffer(void)
   {
     buffer_ol[i] |= buffer[i];
   }
-#endif    
+#endif
 }
 
 /**
- * 
+ *
  * @param addr
  * @param value
  * @param nbytes
@@ -526,9 +525,9 @@ void i2c_write( uint8_t addr, uint8_t * value, int nbytes)
     memcpy( ptr + 1, value, nbytes );                // then some data
     if (write(bus, value, nbytes) != nbytes)
     {
-            fprintf(stderr, "Error writing %i bytes\n",nbytes);
-            com_serial=0;
-            failcount++;
-    } 
+        fprintf(stderr, "Error writing %i bytes\n",nbytes);
+        com_serial=0;
+        failcount++;
+    }
     free(ptr);
 }

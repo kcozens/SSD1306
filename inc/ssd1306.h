@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   ssd1306.h
  * Author: vadzim
  *
@@ -31,7 +31,7 @@ extern "C" {
 #define     SSD1306_MIN(a,b)            (((a) < (b)) ? (a) : (b))
 #define     SSD1306_MAX(a,b)            (((a) > (b)) ? (a) : (b))
 #define     SWAP(a, b)                  { int16_t t = a; a = b; b = t; }
-    
+
 #define     BLACK                       0
 #define     WHITE                       1
 #define     INVERSE                     2
@@ -41,7 +41,7 @@ extern "C" {
 #define     LAYER1                      2
 
 #define     SSD1306_LCDWIDTH            128
-#define     SSD1306_LCDHEIGHT          	64
+#define     SSD1306_LCDHEIGHT           64
 
 
 #define SSD1306_ADDRESS                 0x3c
@@ -105,8 +105,8 @@ void        ssd1306DrawString( int16_t, int16_t, int8_t * , uint8_t, uint16_t, u
 //void        ssd1306ShiftFrameBuffer( uint16_t height, uint16_t direction);
 void        ssd1306MixFrameBuffer(void);
 
-void i2c_write( uint8_t addr, 
-                uint8_t * value, 
+void i2c_write( uint8_t addr,
+                uint8_t * value,
                 int nbytes);
 int i2c_init(char * bus, int addr);
 
