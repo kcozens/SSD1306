@@ -98,7 +98,7 @@ void        ssd1306DrawLine(int16_t, int16_t, int16_t, int16_t, uint16_t, uint16
 //void        ssd1306FillCircleHelper(int16_t x0, int16_t y0, int16_t r, uint8_t cornername, int16_t delta, uint16_t color, uint16_t layer);
 void        ssd1306FillRect(uint8_t, uint8_t, uint8_t, uint8_t, uint16_t, uint16_t);
 void        ssd1306DrawRect(int16_t, int16_t, int16_t, int16_t, uint16_t, uint16_t);
-//void        ssd1306DrawBitmap(int16_t, int16_t, uint8_t*, int16_t, int16_t, uint16_t);
+void        ssd1306DrawBitmap(int16_t, int16_t, uint8_t*, int16_t, int16_t, uint16_t, uint16_t, uint16_t);
 void        ssd1306SetFont(FONT_INFO*);
 int16_t     ssd1306DrawChar(int16_t, int16_t, uint8_t, uint8_t, uint16_t, uint16_t);
 void        ssd1306DrawString( int16_t, int16_t, int8_t * , uint8_t, uint16_t, uint16_t);

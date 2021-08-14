@@ -363,6 +363,68 @@ void ssd1306DrawRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color,
 }
 
 /**
+ * @brief Draw a bitmap
+ * @param x
+ * @param y
+ * @param data
+ * @param width
+ * @param height
+ * @param size
+ * @param color
+ * @param layer
+ * @return
+ */
+void ssd1306DrawBitmap(int16_t x, int16_t y, uint8_t *data,
+                       int16_t w, int16_t h, uint16_t size,
+                       uint16_t color, uint16_t layer)
+{
+    uint8_t *puVar1;
+    int iVar2;
+    int iVar3;
+    uint8_t *local_20;
+    int8_t l;
+    int16_t i;
+    int16_t j;
+    int16_t k;
+    int16_t _x;
+
+    local_20 = data;
+
+    for (i = 0; i < h; ++i)
+    {
+        iVar3 = w + -1;
+        iVar2 = w + 6;
+        if (iVar3 > -1)
+            iVar2 = iVar3;
+
+        k = (short)(iVar2 >> 3) + 1;
+        _x = 0;
+
+        do {
+            puVar1 = local_20 + 1;
+            l = *local_20;
+
+            for (j = 0; j < 8; ++j)
+            {
+                if (l < '\0')
+                {
+                    if (size == 1)
+                        ssd1306DrawPixel(x + _x, y + i, color, layer);
+                    else
+                        ssd1306DrawRect(_x * size + x, i * size + y, size, size, color, layer);
+                }
+
+                l = (int8_t)((int)l << 1);
+                ++_x;
+            }
+
+            k -= 1;
+            local_20 = puVar1;
+        } while (k > 0);
+    }
+}
+
+/**
  * @brief Draw a character
  * @param x
  * @param y
