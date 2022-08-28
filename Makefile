@@ -1,10 +1,11 @@
+#DEBUG  = -g
 CC     = gcc
-CFLAGS = -I $(IDIR) -g -Wall
+CFLAGS = -I $(IDIR) $(DEBUG) -Wall
 IDIR   = inc
 SOURCE = src
 ODIR   = obj
 LDIR   = lib
-LIBS   = -lm
+LIBS   = -lm $(DEBUG)
 BUILDDIR = build
 _DEPS  = ssd1306.h
 DEPS   = $(patsubst %,$(IDIR)/%,$(_DEPS))
