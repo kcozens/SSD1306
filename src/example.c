@@ -107,8 +107,8 @@ void sig_handler(int signo)
 int main(int argc, char** argv) {
     time_t mytime;
     struct tm *tm;
-    uint8_t time_buffer[80];
-    uint8_t text_buffer[100];
+    char   time_buffer[80];
+    char   text_buffer[100];
     struct ifaddrs *ifaddr, *ifa;
     int family, s, n, row;
     char host[NI_MAXHOST];
