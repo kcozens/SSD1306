@@ -133,7 +133,7 @@ int main(int argc, char** argv) {
 
     while (done == 0) {
         row = 2;
-        _font = (FONT_INFO*)&ubuntuMono_8ptFontInfo;
+        _font = (FONT_INFO*)&genericMono_5x7FontInfo;
 
         /* Display time */
         mytime = time(NULL);
