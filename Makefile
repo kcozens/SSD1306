@@ -17,7 +17,7 @@ OBJ    = $(patsubst %,$(ODIR)/%,$(_OBJ))
 $(ODIR)/%.o: $(SOURCE)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
-$(BUILDDIR)/OrangePI_ssd1306: $(OBJ)
+$(BUILDDIR)/OrangePi_ssd1306: $(OBJ)
 	gcc -o $@ $^ $(CFLAGS) $(LIBS)
 
 .PHONY: clean
